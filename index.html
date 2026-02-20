@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Direito Constitucional e Administrativo - 20 Questões</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background: #2c3e50;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        
+        .quiz-container {
+            width: 100%;
+            max-width: 600px;
+            background: #FFFFFF;
+            border-radius: 30px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 4px solid #c0a86a;
+        }
+        
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .quiz-title {
+            color: #2c3e50;
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            line-height: 1.2;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0 #c0a86a;
+        }
+        
+        .quiz-subtitle-line1 {
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            line-height: 1.3;
+            text-transform: uppercase;
+        }
+        
+        .quiz-subtitle-line2 {
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            line-height: 1.3;
+            margin-top: 5px;
+            text-transform: uppercase;
+            border-top: 2px solid #c0a86a;
+            border-bottom: 2px solid #c0a86a;
+            display: inline-block;
+            padding: 8px 20px;
+        }
+        
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background: #ecf0f1;
+            border-radius: 60px;
+            border: 2px solid #c0a86a;
+        }
+        
+        .question-counter {
+            background: #2c3e50;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: 2px solid #c0a86a;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 20px;
+            background: #bdc3c7;
+            border-radius: 30px;
+            margin: 0 15px;
+            overflow: hidden;
+            border: 1px solid #c0a86a;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2c3e50, #c0a86a);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 30px;
+        }
+        
+        .category-badge {
+            background: #2c3e50;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 30px;
+            border: 2px solid #c0a86a;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .timer-container {
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .timer {
+            display: inline-block;
+            background: #2c3e50;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 60px;
+            border: 3px solid #c0a86a;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .question-area {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 30px 20px;
+            margin-bottom: 25px;
+            border-left: 5px solid #2c3e50;
+            border-right: 5px solid #c0a86a;
+            box-shadow: 0 5px 15px rgba(44,62,80,0.2);
+        }
+        
+        .question-text {
+            color: #2c3e50;
+            font-size: 22px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .option-btn {
+            background: white;
+            border: 2px solid #bdc3c7;
+            border-radius: 15px;
+            padding: 18px 20px;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            display: block;
+            box-shadow: 0 4px 6px rgba(44,62,80,0.1);
+        }
+        
+        .option-btn:hover:not(:disabled) {
+            background: #ecf0f1;
+            border-color: #2c3e50;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(44,62,80,0.2);
+        }
+        
+        .option-btn.selected {
+            background: #d5dbdb;
+            border-color: #2c3e50;
+            box-shadow: 0 4px 0 #1a252f;
+        }
+        
+        .option-btn.correct {
+            background: #27ae60;
+            border-color: #c0a86a;
+            color: white;
+            box-shadow: 0 4px 0 #1e8449;
+        }
+        
+        .option-btn.incorrect {
+            background: #e74c3c;
+            border-color: #c0a86a;
+            color: white;
+            box-shadow: 0 4px 0 #b03a2e;
+        }
+        
+        .option-btn:disabled {
+            opacity: 0.9;
+            cursor: default;
+            transform: none;
+        }
+        
+        .option-prefix {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 35px;
+            font-size: 20px;
+            font-weight: bold;
+            margin-right: 15px;
+            border: 2px solid #c0a86a;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .loading-content {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            border: 4px solid #2c3e50;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #bdc3c7;
+            border-top-color: #2c3e50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .result-screen {
+            text-align: center;
+        }
+        
+        .final-score {
+            background: linear-gradient(135deg, #2c3e50, #1a252f);
+            border-radius: 25px;
+            padding: 35px;
+            margin: 20px 0;
+            color: white;
+            border: 4px solid #c0a86a;
+        }
+        
+        .score-number {
+            font-size: 90px;
+            font-weight: bold;
+            line-height: 1;
+            margin: 15px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .score-label {
+            font-size: 28px;
+            opacity: 0.9;
+        }
+        
+        .level-result {
+            font-size: 26px;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(192,168,106,0.2);
+            border-radius: 60px;
+            border: 2px solid #c0a86a;
+        }
+        
+        .action-btn {
+            background: white;
+            border: none;
+            border-radius: 15px;
+            padding: 18px;
+            color: #2c3e50;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin: 12px 0;
+            box-shadow: 0 4px 10px rgba(44,62,80,0.3);
+            border: 3px solid #c0a86a;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(192,168,106,0.5);
+            background: #f8f9fa;
+        }
+        
+        .action-btn.secondary {
+            background: #ecf0f1;
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 15px;
+            border: 3px solid #c0a86a;
+            margin: 10px 0;
+            transition: all 0.2s ease;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        .name-input:focus {
+            outline: none;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 3px rgba(192,168,106,0.3);
+        }
+        
+        .name-input::placeholder {
+            color: #95a5a6;
+            font-weight: normal;
+        }
+        
+        @media (max-width: 480px) {
+            .quiz-title { font-size: 42px; }
+            .quiz-subtitle-line1 { font-size: 24px; }
+            .quiz-subtitle-line2 { font-size: 20px; }
+            .question-text { font-size: 20px; }
+            .option-btn { font-size: 16px; padding: 15px; }
+            .score-number { font-size: 70px; }
+            .progress-container { 
+                flex-direction: column; 
+                gap: 10px; 
+            }
+            .progress-bar { 
+                width: 100%; 
+                margin: 10px 0; 
+            }
+            .category-badge { 
+                min-width: 100%; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="quizContent"></div>
+    </div>
+
+    <div id="loading" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div style="font-size: 20px; color: #2c3e50; font-weight: bold;">Carregando questões...</div>
+        </div>
+    </div>
+
+    <script>
+        // LINK PARA MAIS QUESTÕES
+        const CONCURSO_LINK = "https://s.shopee.com.br/8pgTuA2wJ7";
+        const RESULTADOS_LINK = CONCURSO_LINK;
+
+        // ===== 20 PERGUNTAS DE DIREITO CONSTITUCIONAL E ADMINISTRATIVO =====
+        const questions = [
+            // DIREITO CONSTITUCIONAL - Princípios Fundamentais (1-5)
+            {
+                question: "⚖️ 'Constituem objetivos fundamentais da República Federativa do Brasil, EXCETO:'",
+                options: [
+                    "Construir uma sociedade livre, justa e solidária",
+                    "Garantir o desenvolvimento nacional",
+                    "Erradicar a pobreza e a marginalização",
+                    "Promover o bem de todos, sem preconceitos de origem, raça, sexo, cor, idade e quaisquer outras formas de discriminação",
+                    "Manter relações internacionais com base na independência nacional"
+                ],
+                answer: 5,
+                category: "PRINCÍPIOS FUNDAMENTAIS"
+            },
+            {
+                question: "⚖️ 'São poderes da União, independentes e harmônicos entre si:'",
+                options: [
+                    "Executivo, Legislativo e Judiciário",
+                    "Executivo, Legislativo e Ministério Público",
+                    "Executivo, Judiciário e Tribunais de Contas",
+                    "Legislativo, Judiciário e Defensoria Pública",
+                    "Executivo, Legislativo e Forças Armadas"
+                ],
+                answer: 1,
+                category: "PRINCÍPIOS FUNDAMENTAIS"
+            },
+            {
+                question: "⚖️ 'A República Federativa do Brasil rege-se nas suas relações internacionais pelos seguintes princípios, EXCETO:'",
+                options: [
+                    "Independência nacional",
+                    "Prevalência dos direitos humanos",
+                    "Autodeterminação dos povos",
+                    "Intervenção em conflitos internacionais",
+                    "Concessão de asilo político"
+                ],
+                answer: 4,
+                category: "PRINCÍPIOS FUNDAMENTAIS"
+            },
+            {
+                question: "⚖️ 'Todo o poder emana do povo, que o exerce por meio de representantes eleitos ou diretamente, nos termos da Constituição. Este princípio consagra a:'",
+                options: [
+                    "Separação dos poderes",
+                    "Soberania popular",
+                    "Cidadania",
+                    "Dignidade da pessoa humana",
+                    "República"
+                ],
+                answer: 2,
+                category: "PRINCÍPIOS FUNDAMENTAIS"
+            },
+            {
+                question: "⚖️ 'A federação brasileira é formada pela união indissolúvel:'",
+                options: [
+                    "Dos Estados e Municípios",
+                    "Dos Estados, Municípios e Distrito Federal",
+                    "Dos Estados, Distrito Federal e Territórios",
+                    "Dos Estados, Municípios e Territórios",
+                    "Dos Estados, Municípios, Distrito Federal e Territórios"
+                ],
+                answer: 2,
+                category: "PRINCÍPIOS FUNDAMENTAIS"
+            },
+            
+            // DIREITO CONSTITUCIONAL - Direitos e Garantias Fundamentais (6-10)
+            {
+                question: "⚖️ 'A casa é asilo inviolável do indivíduo, ninguém nela podendo penetrar sem consentimento do morador, salvo em caso de:'",
+                options: [
+                    "Flagrante delito ou desastre, ou para prestar socorro, ou durante o dia por determinação judicial",
+                    "Qualquer hora do dia ou da noite com ordem judicial",
+                    "Suspeita de crime, independentemente de ordem judicial",
+                    "Investigação criminal, a qualquer hora, com autorização do delegado",
+                    "Flagrante delito apenas, sem restrição de horário"
+                ],
+                answer: 1,
+                category: "DIREITOS FUNDAMENTAIS"
+            },
+            {
+                question: "⚖️ 'É livre a expressão da atividade intelectual, artística, científica e de comunicação, independentemente de censura ou licença. Este direito:'",
+                options: [
+                    "É absoluto, não admitindo restrições",
+                    "Pode ser limitado em caso de estado de sítio",
+                    "Não se aplica a menores de idade",
+                    "Depende de registro prévio",
+                    "É exclusivo para brasileiros natos"
+                ],
+                answer: 2,
+                category: "DIREITOS FUNDAMENTAIS"
+            },
+            {
+                question: "⚖️ 'A criação de associações e cooperativas depende de:'",
+                options: [
+                    "Autorização do órgão competente",
+                    "Registro no cartório de pessoas jurídicas",
+                    "Autorização do Ministério Público",
+                    "Inexigibilidade de autorização, vedada a interferência estatal em seu funcionamento",
+                    "Aprovação em assembleia pública"
+                ],
+                answer: 4,
+                category: "DIREITOS FUNDAMENTAIS"
+            },
+            {
+                question: "⚖️ 'Ninguém será privado de direitos por motivo de crença religiosa ou de convicção filosófica ou política, salvo se:'",
+                options: [
+                    "As invocar para eximir-se de obrigação legal a todos imposta",
+                    "For menor de idade",
+                    "For estrangeiro",
+                    "Não tiver registro em cartório",
+                    "For servidor público"
+                ],
+                answer: 1,
+                category: "DIREITOS FUNDAMENTAIS"
+            },
+            {
+                question: "⚖️ 'A pequena propriedade rural, assim definida em lei, desde que trabalhada pela família, não será objeto de penhora para pagamento de débitos decorrentes de sua atividade produtiva, dispondo a lei sobre os meios de financiar o seu desenvolvimento. Este direito é:'",
+                options: [
+                    "Impenhorabilidade absoluta",
+                    "Impenhorabilidade relativa",
+                    "Imprescritibilidade",
+                    "Inalienabilidade",
+                    "Irrenunciabilidade"
+                ],
+                answer: 1,
+                category: "DIREITOS FUNDAMENTAIS"
+            },
+            
+            // DIREITO ADMINISTRATIVO - Princípios e Atos (11-15)
+            {
+                question: "⚖️ 'Os princípios expressos da administração pública no art. 37 da Constituição Federal são:'",
+                options: [
+                    "Legalidade, impessoalidade, moralidade, publicidade e eficiência",
+                    "Legalidade, moralidade, finalidade, razoabilidade e eficiência",
+                    "Impessoalidade, moralidade, publicidade, motivação e segurança jurídica",
+                    "Legalidade, impessoalidade, moralidade, publicidade e supremacia do interesse público",
+                    "Legalidade, impessoalidade, moralidade, eficiência e continuidade"
+                ],
+                answer: 1,
+                category: "PRINCÍPIOS ADMINISTRATIVOS"
+            },
+            {
+                question: "⚖️ 'O ato administrativo que contém vício sanável é passível de:'",
+                options: [
+                    "Anulação",
+                    "Revogação",
+                    "Convalidação",
+                    "Cassação",
+                    "Caducidade"
+                ],
+                answer: 3,
+                category: "ATOS ADMINISTRATIVOS"
+            },
+            {
+                question: "⚖️ 'A modalidade de licitação para compras de maior vulto é:'",
+                options: [
+                    "Tomada de preços",
+                    "Concorrência",
+                    "Pregão",
+                    "Convite",
+                    "Concurso"
+                ],
+                answer: 2,
+                category: "LICITAÇÕES"
+            },
+            {
+                question: "⚖️ 'O prazo de validade do concurso público é de:'",
+                options: [
+                    "Até 1 ano, prorrogável por igual período",
+                    "Até 2 anos, prorrogável por igual período",
+                    "Até 3 anos, prorrogável por mais 2",
+                    "Até 4 anos, sem prorrogação",
+                    "Até 5 anos, prorrogável uma vez"
+                ],
+                answer: 2,
+                category: "SERVIDORES PÚBLICOS"
+            },
+            {
+                question: "⚖️ 'A estabilidade do servidor público concursado é adquirida após:'",
+                options: [
+                    "2 anos de efetivo exercício",
+                    "3 anos de efetivo exercício",
+                    "4 anos de efetivo exercício",
+                    "5 anos de efetivo exercício",
+                    "10 anos de efetivo exercício"
+                ],
+                answer: 2,
+                category: "SERVIDORES PÚBLICOS"
+            },
+            
+            // DIREITO ADMINISTRATIVO - Poderes e Controles (16-20)
+            {
+                question: "⚖️ 'O poder que a administração tem de rever os próprios atos, anulando os ilegais e revogando os inconvenientes ou inoportunos, denomina-se:'",
+                options: [
+                    "Poder hierárquico",
+                    "Poder disciplinar",
+                    "Poder de polícia",
+                    "Poder regulamentar",
+                    "Poder de autotutela"
+                ],
+                answer: 5,
+                category: "PODERES ADMINISTRATIVOS"
+            },
+            {
+                question: "⚖️ 'A administração pública direta e indireta de qualquer dos Poderes da União, dos Estados, do Distrito Federal e dos Municípios obedecerá aos princípios de legalidade, impessoalidade, moralidade, publicidade e eficiência. Este dispositivo está previsto no:'",
+                options: [
+                    "Art. 5º da CF",
+                    "Art. 37 da CF",
+                    "Art. 40 da CF",
+                    "Art. 84 da CF",
+                    "Art. 105 da CF"
+                ],
+                answer: 2,
+                category: "PRINCÍPIOS ADMINISTRATIVOS"
+            },
+            {
+                question: "⚖️ 'São requisitos do ato administrativo, EXCETO:'",
+                options: [
+                    "Competência",
+                    "Finalidade",
+                    "Forma",
+                    "Motivo",
+                    "Discricionariedade"
+                ],
+                answer: 5,
+                category: "ATOS ADMINISTRATIVOS"
+            },
+            {
+                question: "⚖️ 'A extinção do ato administrativo por razões de conveniência e oportunidade denomina-se:'",
+                options: [
+                    "Anulação",
+                    "Revogação",
+                    "Cassação",
+                    "Caducidade",
+                    "Contraposição"
+                ],
+                answer: 2,
+                category: "ATOS ADMINISTRATIVOS"
+            },
+            {
+                question: "⚖️ 'O controle da administração pública que visa verificar a legalidade e a legitimidade dos atos, bem como o desempenho dos agentes, é exercido:'",
+                options: [
+                    "Apenas pelo Poder Judiciário",
+                    "Apenas pelo Poder Legislativo com auxílio do Tribunal de Contas",
+                    "Apenas pela própria administração",
+                    "Pelos Poderes Legislativo, Judiciário e pela própria administração, cada qual no exercício de suas funções",
+                    "Exclusivamente pelo Ministério Público"
+                ],
+                answer: 4,
+                category: "CONTROLE DA ADMINISTRAÇÃO"
+            },
+            {
+                question: "⚖️ 'A modalidade de licitação destinada a garantir a seleção da proposta mais vantajosa para a administração, com critérios objetivos previamente definidos em edital, é obrigatória para:'",
+                options: [
+                    "Compras de pequeno valor apenas",
+                    "Contratação de obras, serviços, compras e alienações, ressalvadas as hipóteses de dispensa e inexigibilidade",
+                    "Apenas para obras públicas",
+                    "Apenas para serviços de consultoria",
+                    "Apenas para contratação de pessoal"
+                ],
+                answer: 2,
+                category: "LICITAÇÕES"
+            }
+        ];
+
+        const TOTAL_QUESTIONS = questions.length;
+        let current = 0;
+        let score = 0;
+        let answered = false;
+        let userAnswers = [];
+        let timer;
+        let timeLeft = 60;
+
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = 60;
+            updateTimerDisplay();
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    if (!answered) {
+                        userAnswers.push(0);
+                        nextQuestion();
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById('timer');
+            if (timerEl) timerEl.textContent = `⏳ ${timeLeft}s`;
+        }
+
+        function showQuestion() {
+            answered = false;
+            const q = questions[current];
+            
+            let html = `
+                <div class="quiz-header">
+                    <div class="quiz-title">⚖️</div>
+                    <div class="quiz-subtitle-line1">DIREITO</div>
+                    <div class="quiz-subtitle-line2">(CONSTITUCIONAL/ADMINISTRATIVO)</div>
+                    
+                    <div class="progress-container">
+                        <div class="question-counter">${current + 1}/${TOTAL_QUESTIONS}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${((current + 1) / TOTAL_QUESTIONS) * 100}%"></div>
+                        </div>
+                        <div class="category-badge">${q.category}</div>
+                    </div>
+                    
+                    <div class="timer-container">
+                        <div class="timer" id="timer">⏳ 60s</div>
+                    </div>
+                </div>
+                
+                <div class="question-area">
+                    <div class="question-text">${q.question}</div>
+                </div>
+                
+                <div class="options-container" id="optionsContainer">
+            `;
+            
+            const letters = ['A', 'B', 'C', 'D', 'E'];
+            q.options.forEach((opt, i) => {
+                html += `
+                    <button class="option-btn" onclick="selectOption(${i+1})">
+                        <span class="option-prefix">${letters[i]}</span>
+                        ${opt}
+                    </button>
+                `;
+            });
+            
+            html += `</div>`;
+            
+            document.getElementById('quizContent').innerHTML = html;
+            startTimer();
+        }
+
+        function selectOption(selected) {
+            if (answered) return;
+            answered = true;
+            clearInterval(timer);
+            
+            const correct = questions[current].answer;
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            buttons.forEach(b => b.classList.remove('selected', 'correct', 'incorrect'));
+            buttons[selected-1].classList.add('selected');
+            
+            setTimeout(() => {
+                buttons.forEach((btn, i) => {
+                    if (i+1 === correct) {
+                        btn.classList.add('correct');
+                    } else if (i+1 === selected && selected !== correct) {
+                        btn.classList.add('incorrect');
+                    }
+                    btn.disabled = true;
+                });
+                
+                userAnswers.push(selected);
+                if (selected === correct) {
+                    score++;
+                    if (typeof confetti !== 'undefined') {
+                        confetti({
+                            particleCount: 30,
+                            spread: 50,
+                            colors: ['#2c3e50', '#c0a86a']
+                        });
+                    }
+                }
+                
+                setTimeout(nextQuestion, 800);
+            }, 300);
+        }
+
+        function nextQuestion() {
+            current++;
+            if (current < questions.length) {
+                showQuestion();
+            } else {
+                showFinalScreen();
+            }
+        }
+
+        function showFinalScreen() {
+            let levelMessage = "";
+            let levelEmoji = "";
+            
+            if (score >= 18) {
+                levelMessage = "APROVADO - Excelente conhecimento! 🌟";
+                levelEmoji = "🏆";
+                if (typeof confetti !== 'undefined') {
+                    confetti({ particleCount: 200, spread: 120, colors: ['#2c3e50', '#c0a86a'] });
+                }
+            } else if (score >= 15) {
+                levelMessage = "CLASSIFICADO - Muito bem! 👍";
+                levelEmoji = "📚";
+                if (typeof confetti !== 'undefined') {
+                    confetti({ particleCount: 100, spread: 80, colors: ['#c0a86a'] });
+                }
+            } else if (score >= 10) {
+                levelMessage = "HABILITADO - Bom desempenho! 💪";
+                levelEmoji = "📝";
+            } else {
+                levelMessage = "ESTUDE MAIS - Continue praticando! 📖";
+                levelEmoji = "📖";
+            }
+            
+            let html = `
+                <div class="quiz-header">
+                    <div class="quiz-title">⚖️</div>
+                    <div class="quiz-subtitle-line1">DIREITO</div>
+                    <div class="quiz-subtitle-line2">(CONSTITUCIONAL/ADMINISTRATIVO)</div>
+                </div>
+                
+                <div class="result-screen">
+                    <div class="final-score">
+                        <div class="score-label">Sua Pontuação</div>
+                        <div class="score-number">${score}/${TOTAL_QUESTIONS}</div>
+                        <div class="level-result">${levelEmoji} ${levelMessage}</div>
+                    </div>
+                    
+                    <button class="action-btn" onclick="redirectToResultados()">
+                        🔗 VER GABARITO
+                    </button>
+                    
+                    <button class="action-btn secondary" onclick="redirectToConcurso()">
+                        🚀 MAIS QUESTÕES
+                    </button>
+                    
+                    <input type="text" class="name-input" id="participantName" 
+                           placeholder="Digite seu nome">
+                    <button class="action-btn secondary" onclick="sendResults()">
+                        💾 SALVAR RESULTADO
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('quizContent').innerHTML = html;
+        }
+
+        function redirectToResultados() {
+            window.open(CONCURSO_LINK, '_blank');
+        }
+
+        function redirectToConcurso() {
+            window.open(CONCURSO_LINK, '_blank');
+        }
+
+        function sendResults() {
+            const name = document.getElementById('participantName').value.trim();
+            if (!name) {
+                alert('Por favor, digite seu nome!');
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'flex';
+            
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                alert(`Parabéns ${name}! Sua pontuação: ${score}/${TOTAL_QUESTIONS}`);
+            }, 1000);
+        }
+
+        // Carrega a biblioteca de confete e inicia o quiz
+        function loadConfettiAndStart() {
+            if (typeof confetti === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js';
+                script.onload = function() {
+                    showQuestion();
+                };
+                document.head.appendChild(script);
+            } else {
+                showQuestion();
+            }
+        }
+
+        // Inicia o quiz
+        loadConfettiAndStart();
+    </script>
+</body>
+</html>
